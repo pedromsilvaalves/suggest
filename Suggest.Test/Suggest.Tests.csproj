@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Suggest.Api\Suggest.Api.csproj" />
     <ProjectReference Include="..\Suggest.Services\Suggest.Services.csproj" />
-    <ProjectReference Include="..\Suggest\Suggest.Api.csproj" />
   </ItemGroup>
 
 </Project>
