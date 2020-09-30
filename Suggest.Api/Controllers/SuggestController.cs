@@ -11,7 +11,7 @@ namespace Suggest.Api.Controllers
     [Route("suggest")]
     public class SuggestController : ApiBaseController
     {
-        private ISuggestRepository _suggestRepository;
+        private readonly ISuggestRepository _suggestRepository;
         public SuggestController(ISuggestRepository suggestRepository)
         {
             _suggestRepository = suggestRepository;
