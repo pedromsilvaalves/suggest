@@ -6,11 +6,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Suggest.Api.Logging;
+using Suggest.Infrastructure.Models;
 using Suggest.Infrastructure.Repositories;
 using Suggest.Services.Repositories;
 using System;
 using System.IO;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 
 namespace Suggest
 {
@@ -26,6 +28,9 @@ namespace Suggest
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRouting(options => options.LowercaseUrls = true);
+
+            services.AddDbContext<SuggestionContext>(opt =>
+               opt.UseInMemoryDatabase("Suggestions"));
 
             services.AddControllers();
 

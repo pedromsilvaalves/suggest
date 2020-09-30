@@ -3,6 +3,7 @@ using Moq;
 using Suggest.Api.Controllers;
 using Suggest.Services.Entities;
 using Suggest.Services.Repositories;
+using System;
 using System.Collections.Generic;
 using Xunit;
 
@@ -23,7 +24,21 @@ namespace Suggest.Tests.Controllers
         [Fact]
         public void GetSuggestion_NotFound_Test()
         {
+            var suggestRepository = new Mock<ISuggestRepository>();
+            suggestRepository.Setup(x => x.GetSuggestion(It.IsAny<Guid>())).Returns((Suggestion)null);
 
+            var result = new SuggestController(suggestRepository.Object).GetSuggestion(new Guid());
+            Assert.IsType<NotFoundObjectResult>(result);
+        }
+
+        [Fact]
+        public void GetSuggestion_Sucess_Test()
+        {
+            var suggestRepository = new Mock<ISuggestRepository>();
+            suggestRepository.Setup(x => x.GetSuggestion(It.IsAny<Guid>())).Returns(new Suggestion());
+
+            var result = new SuggestController(suggestRepository.Object).GetSuggestion(new Guid());
+            Assert.IsType<OkObjectResult>(result);
         }
     }
 }

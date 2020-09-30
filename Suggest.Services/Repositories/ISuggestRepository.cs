@@ -8,5 +8,6 @@ namespace Suggest.Services.Repositories
     public interface ISuggestRepository
     {
         IEnumerable<Suggestion> GetSuggestions();
+        Suggestion GetSuggestion(Guid suggestionId);
     }
 }

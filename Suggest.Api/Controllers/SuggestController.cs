@@ -32,9 +32,14 @@ namespace Suggest.Api.Controllers
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status500InternalServerError)]
         [Route("{suggestionId}")]
-        public IActionResult GetSuggestions([FromRoute]Guid suggestionId)
+        public IActionResult GetSuggestion([FromRoute]Guid suggestionId)
         {
-            return Ok("");
+            var suggestion = _suggestRepository.GetSuggestion(suggestionId);
+            if(suggestion == null)
+            {
+                return NotFound("Suggestion not found");
+            }
+            return Ok(suggestion);
         }
     }
 }
