@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Suggest.Api.Models;
 using Suggest.Services.Entities;
+using Suggest.Services.Interfaces;
 using Suggest.Services.Models;
 using Suggest.Services.Repositories;
 using System;
@@ -8,13 +10,15 @@ using System;
 namespace Suggest.Api.Controllers
 {
     [ApiController]
-    [Route("suggest")]
+    [Route("suggestions")]
     public class SuggestController : ApiBaseController
     {
         private readonly ISuggestRepository _suggestRepository;
-        public SuggestController(ISuggestRepository suggestRepository)
+        private readonly ISuggestServices _suggestServices;
+        public SuggestController(ISuggestRepository suggestRepository, ISuggestServices suggestService)
         {
             _suggestRepository = suggestRepository;
+            _suggestServices = suggestService;
         }
 
         [HttpGet]
@@ -40,6 +44,13 @@ namespace Suggest.Api.Controllers
                 return NotFound("Suggestion not found");
             }
             return Ok(suggestion);
+        }
+
+        [HttpPost]
+        [Route("")]
+        public IActionResult CreateSuggestion([FromBody]CreateSuggestionInputModel createSuggestionModel)
+        {
+            return Ok();
         }
     }
 }

@@ -19,4 +19,8 @@
     <ProjectReference Include="..\Suggest.Services\Suggest.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>

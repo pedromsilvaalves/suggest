@@ -8,5 +8,6 @@ namespace Suggest.Services.Repositories
     {
         IEnumerable<Suggestion> GetSuggestions();
         Suggestion GetSuggestion(Guid suggestionId);
+        Suggestion CreateSuggetion(Suggestion newSuggestion);
     }
 }

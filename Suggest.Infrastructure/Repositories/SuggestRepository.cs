@@ -26,5 +26,10 @@ namespace Suggest.Infrastructure.Repositories
         {
             return _suggestionContext.Find<Suggestion>(suggestionId);
         }
+
+        public Suggestion CreateSuggetion(Suggestion newSuggestion)
+        {
+            return null;
+        }
     }
 }
