@@ -20,5 +20,6 @@ RUN dotnet publish "Suggest.Api.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
+COPY ["Suggest.Api/Suggest.Api.xml", "Suggest.Api.xml"]
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Suggest.Api.dll"]
