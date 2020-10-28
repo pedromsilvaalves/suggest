@@ -14,8 +14,8 @@ namespace Suggest.Api.Controllers
     public class SuggestController : ApiBaseController
     {
         private readonly ISuggestRepository _suggestRepository;
-        private readonly ISuggestServices _suggestServices;
-        public SuggestController(ISuggestRepository suggestRepository, ISuggestServices suggestService)
+        private readonly ISuggestService _suggestServices;
+        public SuggestController(ISuggestRepository suggestRepository, ISuggestService suggestService)
         {
             _suggestRepository = suggestRepository;
             _suggestServices = suggestService;
@@ -48,9 +48,14 @@ namespace Suggest.Api.Controllers
 
         [HttpPost]
         [Route("")]
-        public IActionResult CreateSuggestion([FromBody]CreateSuggestionInputModel createSuggestionModel)
+        public IActionResult CreateSuggestion([FromBody] CreateSuggestionInputModel createSuggestionModel)
         {
-            return Ok();
+            var createdSuggestionReturnModel = _suggestServices.CreateSuggestion(createSuggestionModel.Name, createSuggestionModel.Email, createSuggestionModel.Content);
+            if (createdSuggestionReturnModel.IsSuccessful && createdSuggestionReturnModel.CreatedSuggestion != null)
+            {
+                return Ok(createdSuggestionReturnModel.CreatedSuggestion);
+            }
+            return BadRequest("Invalid parameters");
         }
     }
 }

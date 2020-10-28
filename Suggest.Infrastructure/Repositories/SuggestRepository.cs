@@ -29,7 +29,9 @@ namespace Suggest.Infrastructure.Repositories
 
         public Suggestion CreateSuggetion(Suggestion newSuggestion)
         {
-            return null;
+            _suggestionContext.Add(newSuggestion);
+            _suggestionContext.SaveChanges();
+            return newSuggestion;
         }
     }
 }

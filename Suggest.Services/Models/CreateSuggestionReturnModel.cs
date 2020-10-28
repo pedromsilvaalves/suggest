@@ -4,6 +4,6 @@ namespace Suggest.Services.Models
 {
     public class CreateSuggestionReturnModel : BaseReturnModel
     {
-        Suggestion CreatedSuggestion { get; set; }
+        public Suggestion CreatedSuggestion { get; set; }
     }
 }

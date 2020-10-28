@@ -4,6 +4,7 @@ using Suggest.Api.Controllers;
 using Suggest.Api.Models;
 using Suggest.Services.Entities;
 using Suggest.Services.Interfaces;
+using Suggest.Services.Models;
 using Suggest.Services.Repositories;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace Suggest.Tests.Controllers
         public void GetSuggestions_Success_Test()
         {
             var suggestRepository = new Mock<ISuggestRepository>();
-            var suggestService = new Mock<ISuggestServices>();
+            var suggestService = new Mock<ISuggestService>();
 
             suggestRepository.Setup(x => x.GetSuggestions()).Returns(new List<Suggestion>());
             
@@ -29,7 +30,7 @@ namespace Suggest.Tests.Controllers
         public void GetSuggestion_NotFound_Test()
         {
             var suggestRepository = new Mock<ISuggestRepository>();
-            var suggestService = new Mock<ISuggestServices>();
+            var suggestService = new Mock<ISuggestService>();
 
             suggestRepository.Setup(x => x.GetSuggestion(It.IsAny<Guid>())).Returns((Suggestion)null);
 
@@ -41,7 +42,7 @@ namespace Suggest.Tests.Controllers
         public void GetSuggestion_Success_Test()
         {
             var suggestRepository = new Mock<ISuggestRepository>();
-            var suggestService = new Mock<ISuggestServices>();
+            var suggestService = new Mock<ISuggestService>();
 
             suggestRepository.Setup(x => x.GetSuggestion(It.IsAny<Guid>())).Returns(new Suggestion());
 
@@ -50,20 +51,17 @@ namespace Suggest.Tests.Controllers
         }
 
         [Fact]
-        public void CreateSuggestion_Null_BadRequest_Test()
+        public void CreateSuggestion_InvalidParameter_BadRequest_Test()
         {
             var suggestRepository = new Mock<ISuggestRepository>();
-            var suggestService = new Mock<ISuggestServices>();
+            var suggestService = new Mock<ISuggestService>();
 
-            var result = new SuggestController(suggestRepository.Object, suggestService.Object).CreateSuggestion(null);
-            Assert.IsType<BadRequestObjectResult>(result);
-        }
-
-        [Fact]
-        public void CreateSuggestion_InvalidName_BadRequest_Test()
-        {
-            var suggestRepository = new Mock<ISuggestRepository>();
-            var suggestService = new Mock<ISuggestServices>();
+            var createSuggestionReturn = new CreateSuggestionReturnModel
+            {
+                CreatedSuggestion = new Suggestion(),
+                ErrorType = Suggest.Services.Enums.ReturnErrorType.InvalidParameters,
+                IsSuccessful = false
+            };
 
             var createSuggestionInputModel = new CreateSuggestionInputModel
             {
@@ -72,39 +70,8 @@ namespace Suggest.Tests.Controllers
                 Email = "test@test.com"
             };
 
-            var result = new SuggestController(suggestRepository.Object, suggestService.Object).CreateSuggestion(createSuggestionInputModel);
-            Assert.IsType<BadRequestObjectResult>(result);
-        }
-
-        [Fact]
-        public void CreateSuggestion_InvalidContent_BadRequest_Test()
-        {
-            var suggestRepository = new Mock<ISuggestRepository>();
-            var suggestService = new Mock<ISuggestServices>();
-
-            var createSuggestionInputModel = new CreateSuggestionInputModel
-            {
-                Name = "Persona Test",
-                Content = null,
-                Email = "test@test.com"
-            };
-
-            var result = new SuggestController(suggestRepository.Object, suggestService.Object).CreateSuggestion(createSuggestionInputModel);
-            Assert.IsType<BadRequestObjectResult>(result);
-        }
-
-        [Fact]
-        public void CreateSuggestion_InvalidEmail_BadRequest_Test()
-        {
-            var suggestRepository = new Mock<ISuggestRepository>();
-            var suggestService = new Mock<ISuggestServices>();
-
-            var createSuggestionInputModel = new CreateSuggestionInputModel
-            {
-                Name = "Persona Test",
-                Content = "Test content",
-                Email = null
-            };
+            suggestService.Setup(x => x.CreateSuggestion(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(createSuggestionReturn);
 
             var result = new SuggestController(suggestRepository.Object, suggestService.Object).CreateSuggestion(createSuggestionInputModel);
             Assert.IsType<BadRequestObjectResult>(result);
@@ -114,7 +81,13 @@ namespace Suggest.Tests.Controllers
         public void CreateSuggestion_Success_Test()
         {
             var suggestRepository = new Mock<ISuggestRepository>();
-            var suggestService = new Mock<ISuggestServices>();
+            var suggestService = new Mock<ISuggestService>();
+
+            var createSuggestionReturn = new CreateSuggestionReturnModel
+            {
+                CreatedSuggestion = new Suggestion(),
+                IsSuccessful = true
+            };
 
             var createSuggestionInputModel = new CreateSuggestionInputModel
             {
@@ -122,6 +95,9 @@ namespace Suggest.Tests.Controllers
                 Content = "Test content",
                 Email = "test@test.com"
             };
+
+            suggestService.Setup(x => x.CreateSuggestion(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(createSuggestionReturn);
 
             var result = new SuggestController(suggestRepository.Object, suggestService.Object).CreateSuggestion(createSuggestionInputModel);
             Assert.IsType<OkObjectResult>(result);

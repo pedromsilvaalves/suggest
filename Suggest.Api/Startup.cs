@@ -46,7 +46,7 @@ namespace Suggest
             });
 
             services.AddScoped<ISuggestRepository, SuggestRepository>();
-            services.AddScoped<ISuggestServices, SuggestServices>();
+            services.AddScoped<ISuggestService, SuggestService>();
 
             services.AddSwaggerGen(c =>
             {

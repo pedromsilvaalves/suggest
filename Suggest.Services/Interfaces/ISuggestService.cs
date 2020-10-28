@@ -2,7 +2,7 @@
 
 namespace Suggest.Services.Interfaces
 {
-    public interface ISuggestServices
+    public interface ISuggestService
     {
         CreateSuggestionReturnModel CreateSuggestion(string name, string email, string content);
     }
